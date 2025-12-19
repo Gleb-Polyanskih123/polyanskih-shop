@@ -1,10 +1,31 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/login", "destination": "/api/index.js" },
-    { "source": "/register", "destination": "/api/index.js" },
-    { "source": "/products", "destination": "/api/index.js" },
-    { "source": "/buy", "destination": "/api/index.js" },
-    { "source": "/(.*)", "destination": "/$1" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/login",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/register",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/products",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/buy",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
   ]
 }
