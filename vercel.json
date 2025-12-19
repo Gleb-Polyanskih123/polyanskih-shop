@@ -1,20 +1,9 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "Node.js/server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    { "src": "/login", "dest": "/Node.js/server.js" },
-    { "src": "/register", "dest": "/Node.js/server.js" },
-    { "src": "/products", "dest": "/Node.js/server.js" },
-    { "src": "/buy", "dest": "/Node.js/server.js" },
-    { "src": "/(.*)", "dest": "/$1" }
+  "rewrites": [
+    { "source": "/login", "destination": "/api/index.js" },
+    { "source": "/register", "destination": "/api/index.js" },
+    { "source": "/products", "destination": "/api/index.js" },
+    { "source": "/buy", "destination": "/api/index.js" },
+    { "source": "/(.*)", "destination": "/$1" }
   ]
 }
