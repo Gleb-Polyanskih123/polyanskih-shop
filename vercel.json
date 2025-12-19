@@ -4,28 +4,48 @@
     {
       "src": "Node.js/server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "style.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "script.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "img/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "modules/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/style.css",
-      "dest": "/style.css"
+      "src": "/api/(.*)",
+      "dest": "Node.js/server.js"
     },
     {
-      "src": "/script.js",
-      "dest": "/script.js"
-    },
-    {
-      "src": "/img/(.*)",
-      "dest": "/img/$1"
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|webp|ico))",
+      "dest": "/$1"
     },
     {
       "src": "/modules/(.*)",
       "dest": "/modules/$1"
     },
     {
-      "src": "/(.*)",
-      "dest": "Node.js/server.js"
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*\\.html)",
+      "dest": "/$1"
     }
   ]
 }

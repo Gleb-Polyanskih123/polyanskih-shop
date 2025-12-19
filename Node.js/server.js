@@ -1,16 +1,12 @@
 const express = require("express");
 const { Pool } = require("pg");
 const cors = require("cors");
-const path = require("path");
 
 const app = express();
 
 // Настройка CORS и JSON
 app.use(cors());
 app.use(express.json());
-
-// РАЗДАЧА СТАТИЧЕСКИХ ФАЙЛОВ (CSS, JS, изображения)
-app.use(express.static(path.join(__dirname, "..")));
 
 // Настройка подключения к базе Neon
 const pool = new Pool({
@@ -27,17 +23,15 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
-// Проверка подключения
 pool.on("error", (err) => {
   console.error("Unexpected error on idle client", err);
 });
 
-// === API МАРШРУТЫ ===
+// === ТОЛЬКО API МАРШРУТЫ (БЕЗ СТАТИКИ) ===
 
-// API проверка
 app.get("/api/status", (req, res) => {
   res.json({
-    message: "Server is working!",
+    message: "API is working!",
     timestamp: new Date().toISOString(),
   });
 });
@@ -61,9 +55,10 @@ app.post("/api/login", async (req, res) => {
     if (result.rows.length > 0) {
       res.json({ success: true, username: result.rows[0].username });
     } else {
-      res
-        .status(401)
-        .json({ success: false, message: "Неверный логин или пароль" });
+      res.status(401).json({ 
+        success: false, 
+        message: "Неверный логин или пароль" 
+      });
     }
   } catch (err) {
     console.error("Login error:", err);
@@ -86,9 +81,10 @@ app.post("/api/register", async (req, res) => {
   }
 
   try {
-    const check = await pool.query("SELECT * FROM users WHERE username = $1", [
-      username,
-    ]);
+    const check = await pool.query(
+      "SELECT * FROM users WHERE username = $1", 
+      [username]
+    );
 
     if (check.rows.length > 0) {
       return res.status(400).json({
@@ -97,10 +93,10 @@ app.post("/api/register", async (req, res) => {
       });
     }
 
-    await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [
-      username,
-      password,
-    ]);
+    await pool.query(
+      "INSERT INTO users (username, password) VALUES ($1, $2)", 
+      [username, password]
+    );
 
     res.json({ success: true, message: "Регистрация успешна" });
   } catch (err) {
@@ -113,7 +109,6 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-// Получить все товары
 app.get("/api/products", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM products ORDER BY id");
@@ -127,12 +122,10 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-// === НОВЫЙ МАРШРУТ: Получить один товар по ID ===
 app.get("/api/product/:id", async (req, res) => {
   const productId = req.params.id;
 
   try {
-    // Ищем товар по текстовому ID (например, "jordan-t-shirt")
     const result = await pool.query(
       "SELECT * FROM products WHERE id = $1",
       [productId]
@@ -181,15 +174,9 @@ app.post("/api/buy", async (req, res) => {
   }
 });
 
-// ГЛАВНАЯ СТРАНИЦА - показываем index.html
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "index.html"));
-});
-
-// Обработка несуществующих маршрутов
+// 404 для неизвестных API маршрутов
 app.use((req, res) => {
-  res.status(404).json({ error: "Маршрут не найден" });
+  res.status(404).json({ error: "API endpoint not found" });
 });
 
-// Экспорт для Vercel
 module.exports = app;
