@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Каталог товаров — POLYANSKIH SHOP</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+  
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-top">
+      <div class="header-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+      
+      <div class="user-action">
+        <a href="#" class="header-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+          </svg>
+        </a>
+        <a href="#" class="header-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+          </svg>
+        </a>
+        <a href="#" class="header-icon" id="auth-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+          </svg>
+          <span id="user-name"></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="logo-name">
+      <h1><a href="index.html">POLYANSKIH SHOP</a></h1>
+      <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1120.000000 928.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,928.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
+<path d="M7365 8296 c-130 -42 -258 -144 -318 -253 -85 -157 -87 -370 -5 -526
+40 -77 155 -195 223 -229 118 -60 276 -77 406 -43 239 62 409 282 409 530 0
+233 -153 443 -379 520 -100 34 -234 34 -336 1z"/>
+<path d="M9749 7582 c-30 -27 -155 -136 -279 -242 -540 -466 -1037 -899 -1251
+-1093 l-98 -87 -104 82 c-457 361 -582 458 -595 458 -5 0 -12 -42 -16 -93 -7
+-108 -33 -210 -78 -305 -33 -72 -135 -227 -168 -257 -11 -10 -20 -24 -20 -31
+0 -14 754 -520 841 -564 140 -71 305 -54 408 42 26 24 439 638 666 990 28 42
+75 114 106 160 31 46 172 259 314 473 141 215 275 416 297 448 22 32 38 60 36
+62 -2 3 -29 -17 -59 -43z"/>
+<path d="M4983 7317 c-17 -6 -80 -57 -140 -113 -59 -55 -155 -143 -213 -194
+-58 -51 -132 -119 -165 -150 -114 -108 -407 -375 -579 -529 -34 -30 -106 -96
+-161 -146 -174 -160 -367 -337 -475 -435 -417 -379 -580 -532 -580 -541 0 -5
+28 8 63 29 66 41 254 149 527 302 91 52 228 129 305 173 77 44 169 97 205 117
+36 20 155 88 265 152 110 64 342 197 515 296 173 99 394 226 490 282 l175 102
+245 -17 c135 -9 308 -20 385 -25 319 -19 505 -34 498 -41 -5 -3 -123 -19 -263
+-34 -287 -31 -244 -14 -348 -135 -26 -30 -72 -82 -102 -115 -30 -33 -89 -99
+-130 -145 -41 -47 -116 -130 -165 -185 -50 -55 -138 -154 -195 -220 -58 -66
+-107 -122 -110 -125 -59 -59 -139 -161 -128 -164 7 -2 54 -7 103 -10 286 -18
+661 -137 919 -292 49 -30 94 -54 101 -54 6 0 27 17 45 38 60 67 263 284 375
+402 61 63 155 165 210 225 55 60 154 168 220 240 206 224 227 248 280 330 98
+150 134 295 115 453 -27 212 -165 386 -369 463 -104 39 -77 37 -1051 59 -239
+5 -525 12 -635 15 -145 3 -209 1 -232 -8z"/>
+<path d="M4323 7125 c-774 -258 -1582 -701 -2267 -1244 -336 -266 -791 -702
+-1060 -1016 -71 -82 -138 -160 -149 -172 -11 -13 -17 -26 -14 -30 4 -3 46 32
+95 78 179 173 550 477 812 665 397 286 889 561 1340 752 180 76 440 177 481
+187 14 4 68 45 120 93 168 155 737 653 788 691 46 33 71 62 53 61 -4 -1 -93
+-30 -199 -65z"/>
+<path d="M4350 5294 c-25 -2 -128 -16 -230 -30 -703 -99 -1480 -436 -2135
+-927 -117 -88 -306 -238 -334 -265 -37 -36 8 -12 139 75 221 144 327 205 545
+313 399 195 706 307 1095 399 256 60 598 101 851 101 l146 0 0 -84 c0 -72 4
+-93 27 -140 15 -31 42 -67 60 -81 31 -24 202 -111 471 -240 72 -35 211 -102
+310 -150 99 -48 223 -106 275 -130 52 -24 133 -61 180 -83 114 -54 373 -174
+435 -202 87 -40 168 -77 245 -112 41 -19 123 -56 183 -83 59 -27 107 -53 107
+-57 0 -4 -24 -46 -52 -93 -29 -47 -62 -100 -72 -118 -11 -18 -60 -95 -109
+-172 -50 -77 -96 -151 -103 -165 -8 -14 -43 -70 -78 -125 -36 -55 -82 -129
+-102 -165 -21 -36 -79 -130 -129 -210 -50 -80 -114 -183 -142 -230 -71 -120
+-148 -247 -281 -459 l-114 -184 -84 -246 c-46 -135 -83 -250 -81 -255 4 -11
+91 76 912 907 385 389 841 851 1013 1025 172 174 322 333 332 352 63 121 67
+281 10 397 -44 89 -94 136 -225 212 -60 35 -148 87 -195 116 -47 28 -132 78
+-190 110 -58 32 -159 90 -225 130 -66 39 -146 86 -179 104 -77 42 -453 261
+-636 371 -349 209 -670 324 -1050 376 -103 14 -501 26 -590 18z"/>
+<path d="M4135 4592 c-5 -4 -32 -32 -60 -62 -72 -79 -257 -280 -345 -375 -41
+-44 -118 -127 -170 -184 -52 -57 -99 -109 -105 -115 -5 -6 -44 -49 -85 -96
+-41 -46 -100 -112 -131 -145 -31 -33 -98 -107 -149 -165 -145 -164 -240 -270
+-296 -330 -28 -30 -62 -68 -77 -85 -14 -16 -34 -39 -44 -51 -28 -33 -257 -286
+-368 -407 -55 -60 -135 -151 -178 -201 -44 -50 -102 -116 -131 -146 -28 -30
+-89 -98 -136 -150 -46 -52 -118 -133 -161 -180 -118 -131 -297 -329 -353 -391
+-28 -30 -85 -93 -126 -140 -82 -92 -281 -311 -290 -319 -8 -7 -289 -325 -324
+-367 -15 -19 -27 -36 -24 -38 3 -3 149 109 458 354 47 37 132 103 189 147 57
+43 108 84 115 90 6 5 54 43 106 84 52 40 131 102 175 137 44 35 105 83 135
+107 149 116 742 587 1249 991 207 165 392 312 411 327 19 15 94 74 165 133 72
+58 317 256 545 439 833 669 890 716 890 725 0 4 -62 36 -137 71 -76 35 -272
+128 -436 207 -164 78 -299 143 -300 143 -1 0 -6 -4 -12 -8z"/>
+</g>
+</svg>
+    </div>
+
+    <nav class="main-navigation">
+      <ul>
+        <li><a href="index.html">MEN`S</a></li>
+        <li><a href="#">WOMEN`S</a></li>
+        <li><a href="#">BRANDS</a></li>
+        <li><a href="contacts.html">INFORMATION</a></li>
+        <li><a href="#">SALE</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="catalog-header">
+      <h1>Каталог товаров</h1>
+      <p>Самые свежие коллекции от Nike, Jordan, Gap и других брендов. Бесплатная доставка от 5000 руб.</p>
+    </section>
+
+    <div class="catalog-grid">
+      <!-- Товар 1 -->
+      <a href="product.html?id=jordan-t-shirt" class="product-card">
+  <div class="discount-badge">-20%</div>
+  <img src="img/Jordan T-SHIRT.png" alt="Jordan T-Shirt">
+  <div class="product-info">
+    <h3>Jordan T-Shirt</h3>
+    <p class="price">
+      <span class="old-price">4990 руб.</span>
+      <span class="new-price">3990 руб.</span>
+    </p>
+  </div>
+</a>
+
+      <!-- Товар 2 -->
+      <a href="product.html?id=nike-acg" class="product-card">
+  <div class="discount-badge">-15%</div>
+  <img src="img/Nike-ACG-tshirt.png" alt="Nike ACG T-Shirt">
+  <div class="product-info">
+    <h3>Nike ACG T-Shirt</h3>
+    <p class="price">
+      <span class="old-price">6990 руб.</span>
+      <span class="new-price">5990 руб.</span>
+    </p>
+  </div>
+</a>
+
+      <!-- Товар 3 -->
+      <a href="product.html?id=nike-tech" class="product-card">
+  <div class="discount-badge">-18%</div>
+  <img src="img/nike-tech-flecee.png" alt="Nike Tech fleece">
+  <div class="product-info">
+    <h3>Nike Tech fleece</h3>
+    <p class="price">
+      <span class="old-price">10990 руб.</span>
+      <span class="new-price">8990 руб.</span>
+    </p>
+  </div>
+</a>
+
+      <!-- Товар 4
+      <a href="#" class="product-card">
+        <div class="discount-badge">-19%</div>
+        <img src="img/gap-hoodie.png" alt="Gap zip-hoodie">
+        <div class="product-info">
+          <h3>Gap zip-hoodie</h3>
+          <p class="price">
+            <span class="old-price">8590 руб.</span>
+            <span class="new-price">6990 руб.</span>
+          </p>
+        </div>
+      </a> -->
+
+      <!-- Товар 5 -->
+      <a href="product.html?id=lacoste-hoodie" class="product-card">
+  <div class="discount-badge">-25%</div>
+  <img src="img/lacoste-hoodie.png" alt="Lacoste hoodie">
+  <div class="product-info">
+    <h3>Lacoste hoodie</h3>
+    <p class="price">
+      <span class="old-price">12990 руб.</span>
+      <span class="new-price">10990 руб.</span>
+    </p>
+  </div>
+</a>
+
+      <!-- Товар 6
+      <a href="#" class="product-card">
+        <img src="img/Nike-Rubaha.png" alt="Рубашка Nike">
+        <div class="product-info">
+          <h3>Рубашка Nike</h3>
+          <p class="price">
+            <span class="new-price">3490 руб.</span>
+          </p>
+        </div>
+      </a>
+
+      <!-- Товар 7 -->
+      <!-- <a href="#" class="product-card">
+        <div class="discount-badge">-30%</div>
+        <img src="img/Ralf-Louren-T-Shirt.png" alt="Puma sweatpants">
+        <div class="product-info">
+          <h3>Polo Ralf Lauren T-Shirt</h3>
+          <p class="price">
+            <span class="old-price">5990 руб.</span>
+            <span class="new-price">4190 руб.</span>
+          </p>
+        </div>
+      </a> -->
+
+      
+      <!-- <a href="#" class="product-card">
+        <img src="img/nike-puhan.png" alt="Nike sportswear down jacket">
+        <div class="product-info">
+          <h3>Nike sportswear down jacket</h3>
+          <p class="price">
+            <span class="new-price">15990 руб.</span>
+          </p>
+        </div>
+      </a> --> 
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section footer-about">
+        <h3>POLYANSKIH SHOP</h3>
+        <p>Современный магазин одежды, где вы найдёте лучшие вещи от мировых брендов. Качество, стиль и комфорт – это наша философия.</p>
+      </div>
+      <div class="footer-section navigation">
+        <h3>НАВИГАЦИЯ</h3>
+        <ul>
+          <li>Мужская одежда</li>
+          <li>Женская одежда</li>
+          <li>Все бренды</li>
+          <li>Новинки</li>
+          <li>Распродажа</li>
+        </ul>
+      </div>
+      <div class="footer-section information">
+        <h3>ИНФОРМАЦИЯ</h3>
+        <ul>
+          <li>Доставка и оплата</li>
+          <li>Возврат товара</li>
+          <li>Гарантия качества</li>
+          <li>Политика конфиденциальности</li>
+          <li>Часто задаваемые вопросы</li>
+        </ul>
+      </div>
+      <div class="footer-section contact">
+        <h3>КОНТАКТЫ</h3>
+        <p>
+        <strong>Телефон</strong>
+        <a href="#">+7 (951) 611-76-98</a>
+        </p>
+        <p>
+          <strong>Email</strong>
+          <a href="#">glebpolyanskih2006@mail.ru</a>
+        </p>
+        <p>
+          <strong>Часы работы</strong>
+          Пн-Пт: 10:00 - 20:00<br>
+          Сб-Вс: 11:00 - 19:00
+        </p>
+      </div>
+    </div>
+  </footer>
+<div class="modal-overlay" id="login-modal">
+        <div class="modal-window">
+            <span class="close-btn" id="close-modal">&times;</span>
+            
+            <div id="login-block">
+                <h2>Вход в аккаунт</h2>
+                <form id="login-form">
+                    <span id="error-login-name" class="error-text"></span>
+                    <input type="text" id="login-input" placeholder="Ваше имя">
+
+                    <span id="error-login-pass" class="error-text"></span>
+                    <input type="password" id="login-password" placeholder="Пароль">
+
+                    <button type="submit" class="btn-login">Войти</button>
+                </form>
+                <p style="margin-top: 15px; font-size: 14px;">
+                    Нет аккаунта? <a href="#" id="go-to-register" style="color: #d1b381; font-weight: bold;">Зарегистрироваться</a>
+                </p>
+            </div>
+
+            <div id="register-block" style="display: none;">
+                <h2>Регистрация</h2>
+                <form id="register-form">
+                    <span id="error-reg-name" class="error-text"></span>
+                    <input type="text" id="reg-input" placeholder="Придумайте логин">
+
+                    <span id="error-reg-pass" class="error-text"></span>
+                    <input type="password" id="reg-password" placeholder="Придумайте пароль">
+
+                    <button type="submit" class="btn-login">Создать аккаунт</button>
+                </form>
+                <p style="margin-top: 15px; font-size: 14px;">
+                    Уже есть аккаунт? <a href="#" id="go-to-login" style="color: #d1b381; font-weight: bold;">Войти</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+  <div id="scroll-to-top" class="scroll-to-top">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+      </svg>
+  </div>
+  <script type="module" src="script.js"></script>
+</body>
+</html>
