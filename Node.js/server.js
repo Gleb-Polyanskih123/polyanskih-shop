@@ -105,8 +105,11 @@ app.post("/buy", async (req, res) => {
 });
 
 // ЗАПУСК
-app.listen(PORT, () => {
-  console.log(`🚀 Сервер работает на порту ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Сервер работает на порту ${PORT}`);
+  });
+}
 
+// Обязательно экспортируем app для Vercel
 module.exports = app;
