@@ -1,16 +1,9 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "Node.js/server.js",
-      "use": "@vercel/node"
+      "source": "/(.*)",
+      "destination": "/Node.js/server.js"
     }
-  ],
-  "routes": [
-    { "src": "/login", "dest": "Node.js/server.js" },
-    { "src": "/register", "dest": "Node.js/server.js" },
-    { "src": "/buy", "dest": "Node.js/server.js" },
-    { "src": "/product/(.*)", "dest": "Node.js/server.js" },
-    { "src": "/(.*)", "dest": "/$1" }
   ]
 }

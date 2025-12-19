@@ -1,115 +1,130 @@
-require("dotenv").config(); // Подключаем чтение .env файла
-const dns = require("node:dns");
-dns.setDefaultResultOrder("ipv4first");
 const express = require("express");
-const cors = require("cors");
 const { Pool } = require("pg");
 const path = require("path");
+const cors = require("cors");
 
 const app = express();
-// Порт будет выдавать хостинг, либо 3000 для локальной работы
 const PORT = process.env.PORT || 3000;
+
+// 1. НАСТРОЙКА ПУТЕЙ (Чтобы Vercel видел файлы)
+// __dirname — это папка Node.js. Мы выходим на уровень выше (..), в корень проекта.
+const rootPath = path.join(__dirname, "..");
 
 app.use(cors());
 app.use(express.json());
+// Раздаем статику (картинки, css) из корня
+app.use(express.static(rootPath));
 
-// === САМОЕ ВАЖНОЕ: РАЗДАЧА ФАЙЛОВ ===
-// Сервер теперь отдает браузеру все файлы из текущей папки (html, css, js, img)
-app.use(express.static(path.join(__dirname, '..'))); 
-
-app.get('/', (req, res) => {
-  // Ищем index.html тоже на уровень выше
-  res.sendFile(path.join(__dirname, '..', 'index.html'));
-});
-// Настройка базы данных
+// 2. НАСТРОЙКА БАЗЫ (Обязательно включаем SSL для Neon)
 const pool = new Pool({
-  user: process.env.DB_USER,
   host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
-  // В облаке нужно SSL соединение (secure), локально — нет
-  ssl: process.env.DB_HOST !== 'localhost' ? { rejectUnauthorized: false } : false
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  ssl: {
+    rejectUnauthorized: false, // ЭТО ВАЖНО для облачной базы!
+  },
+});
+
+// Проверка базы при запуске
+pool.connect((err, client, release) => {
+  if (err) {
+    console.error("Ошибка подключения к БД:", err.stack);
+  } else {
+    console.log("✅ Успешное подключение к базе данных Neon!");
+    release();
+  }
 });
 
 // === МАРШРУТЫ (API) ===
 
-// 1. РЕГИСТРАЦИЯ
-app.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) return res.json({ success: false, message: "Заполните все поля!" });
-  if (password.length < 6) return res.json({ success: false, message: "Пароль должен быть не менее 6 символов" });
-  if (username.length < 3) return res.json({ success: false, message: "Логин должен быть не менее 3 символов" });
-
-  try {
-    const checkUser = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
-    if (checkUser.rows.length > 0) return res.json({ success: false, message: "Пользователь уже существует" });
-
-    await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [username, password]);
-    res.json({ success: true, message: "Регистрация успешна!" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Ошибка сервера" });
-  }
-});
-
-// 2. ВХОД
+// Вход
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  if (!username || !password) return res.json({ success: false, message: "Введите логин и пароль!" });
-
   try {
-    const result = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
-    if (result.rows.length === 0) return res.json({ success: false, message: "Пользователь не найден" });
-
-    const user = result.rows[0];
-    if (user.password === password) {
-      res.json({ success: true, username: user.username, message: "Вход выполнен!" });
+    const result = await pool.query(
+      "SELECT * FROM users WHERE username = $1 AND password = $2",
+      [username, password]
+    );
+    if (result.rows.length > 0) {
+      res.json({ success: true, user: result.rows[0] });
     } else {
-      res.json({ success: false, message: "Неверный пароль" });
+      res
+        .status(401)
+        .json({ success: false, message: "Неверный логин или пароль" });
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: "Ошибка сервера" });
+    res.status(500).json({ error: "Ошибка сервера" });
   }
 });
 
-// 3. ПОЛУЧЕНИЕ ОДНОГО ТОВАРА
-app.get("/product/:id", async (req, res) => {
-  const { id } = req.params;
+// Регистрация
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body;
   try {
-    const result = await pool.query("SELECT * FROM products WHERE id = $1", [id]);
-    if (result.rows.length === 0) return res.status(404).json({ success: false, message: "Товар не найден" });
-    res.json(result.rows[0]);
+    // Проверяем, есть ли такой юзер
+    const check = await pool.query("SELECT * FROM users WHERE username = $1", [
+      username,
+    ]);
+    if (check.rows.length > 0) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Пользователь уже существует" });
+    }
+    // Создаем
+    await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [
+      username,
+      password,
+    ]);
+    res.json({ success: true });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: "Ошибка сервера" });
+    res.status(500).json({ error: "Ошибка сервера" });
   }
 });
 
-// 4. ПОКУПКА
-app.post("/buy", async (req, res) => {
-  const { name, phone, product, size } = req.body;
-  if (!name || !phone) return res.json({ success: false, message: "Заполните все поля" });
+// Получение товаров
+app.get("/products", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM products");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Ошибка получения товаров" });
+  }
+});
 
+// Покупка
+app.post("/buy", async (req, res) => {
+  const { customer_name, customer_phone, product_name, product_size } =
+    req.body;
   try {
     await pool.query(
       "INSERT INTO orders (customer_name, customer_phone, product_name, product_size) VALUES ($1, $2, $3, $4)",
-      [name, phone, product, size]
+      [customer_name, customer_phone, product_name, product_size]
     );
-    res.json({ success: true, message: "Заказ оформлен!" });
+    res.json({ success: true });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: "Ошибка сервера" });
+    res.status(500).json({ success: false });
   }
 });
 
-// ЗАПУСК
+// === ГЛАВНЫЕ СТРАНИЦЫ ===
+// Любой другой запрос возвращает index.html (для одностраничного приложения)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(rootPath, "index.html"));
+});
+
+// === ЗАПУСК (Специально для Vercel) ===
+// Мы не запускаем app.listen внутри Vercel, он делает это сам.
+// Но экспортируем приложение.
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`🚀 Сервер работает на порту ${PORT}`);
   });
 }
 
-// Обязательно экспортируем app для Vercel
 module.exports = app;
