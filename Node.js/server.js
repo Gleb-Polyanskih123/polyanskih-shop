@@ -59,7 +59,7 @@ app.post("/api/login", async (req, res) => {
     );
 
     if (result.rows.length > 0) {
-      res.json({ success: true, user: result.rows[0] });
+      res.json({ success: true, username: result.rows[0].username });
     } else {
       res
         .status(401)
@@ -113,6 +113,7 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
+// Получить все товары
 app.get("/api/products", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM products ORDER BY id");
@@ -126,11 +127,37 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-app.post("/api/buy", async (req, res) => {
-  const { customer_name, customer_phone, product_name, product_size } =
-    req.body;
+// === НОВЫЙ МАРШРУТ: Получить один товар по ID ===
+app.get("/api/product/:id", async (req, res) => {
+  const productId = req.params.id;
 
-  if (!customer_name || !customer_phone || !product_name) {
+  try {
+    // Ищем товар по текстовому ID (например, "jordan-t-shirt")
+    const result = await pool.query(
+      "SELECT * FROM products WHERE id = $1",
+      [productId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Товар не найден",
+      });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("Product error:", err);
+    res.status(500).json({
+      error: "Ошибка получения товара",
+      details: err.message,
+    });
+  }
+});
+
+app.post("/api/buy", async (req, res) => {
+  const { name, phone, product, size } = req.body;
+
+  if (!name || !phone || !product) {
     return res.status(400).json({
       success: false,
       message: "Заполните все обязательные поля",
@@ -140,7 +167,7 @@ app.post("/api/buy", async (req, res) => {
   try {
     await pool.query(
       "INSERT INTO orders (customer_name, customer_phone, product_name, product_size) VALUES ($1, $2, $3, $4)",
-      [customer_name, customer_phone, product_name, product_size || "Не указан"]
+      [name, phone, product, size || "Не указан"]
     );
 
     res.json({ success: true, message: "Заказ оформлен" });
