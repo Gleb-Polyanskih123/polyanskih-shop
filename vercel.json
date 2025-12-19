@@ -8,8 +8,20 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "Node.js/server.js"
+      "src": "/style.css",
+      "dest": "/style.css"
+    },
+    {
+      "src": "/script.js",
+      "dest": "/script.js"
+    },
+    {
+      "src": "/img/(.*)",
+      "dest": "/img/$1"
+    },
+    {
+      "src": "/modules/(.*)",
+      "dest": "/modules/$1"
     },
     {
       "src": "/(.*)",
