@@ -1,6 +1,7 @@
 const express = require("express");
 const { Pool } = require("pg");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
@@ -8,7 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Настройка подключения к базе Neon с отдельными переменными
+// РАЗДАЧА СТАТИЧЕСКИХ ФАЙЛОВ (CSS, JS, изображения)
+app.use(express.static(path.join(__dirname, "..")));
+
+// Настройка подключения к базе Neon
 const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT || 5432,
@@ -23,21 +27,22 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
-// Проверка подключения при старте
+// Проверка подключения
 pool.on("error", (err) => {
   console.error("Unexpected error on idle client", err);
 });
 
 // === API МАРШРУТЫ ===
 
-app.get("/", (req, res) => {
+// API проверка
+app.get("/api/status", (req, res) => {
   res.json({
     message: "Server is working!",
     timestamp: new Date().toISOString(),
   });
 });
 
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -70,7 +75,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/register", async (req, res) => {
+app.post("/api/register", async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -108,7 +113,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.get("/products", async (req, res) => {
+app.get("/api/products", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM products ORDER BY id");
     res.json(result.rows);
@@ -121,7 +126,7 @@ app.get("/products", async (req, res) => {
   }
 });
 
-app.post("/buy", async (req, res) => {
+app.post("/api/buy", async (req, res) => {
   const { customer_name, customer_phone, product_name, product_size } =
     req.body;
 
@@ -147,6 +152,11 @@ app.post("/buy", async (req, res) => {
       details: err.message,
     });
   }
+});
+
+// ГЛАВНАЯ СТРАНИЦА - показываем index.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "index.html"));
 });
 
 // Обработка несуществующих маршрутов
