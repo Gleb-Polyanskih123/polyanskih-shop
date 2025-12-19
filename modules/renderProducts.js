@@ -7,7 +7,7 @@ export async function renderProductPage() {
 
   try {
     // 2. Делаем запрос к твоему серверу
-    const response = await fetch(`/product/${productId}`);
+    const response = await fetch(`/api/product/${productId}`);
     
     if (!response.ok) {
       document.querySelector(".product-main").innerHTML = "<h2>Товар не найден</h2>";

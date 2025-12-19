@@ -46,8 +46,9 @@ export function initBuyOneClick() {
         }
 
         try {
-          const response = await fetch("/buy", {
+          const response = await fetch("/api/buy", {
             method: "POST",
+            
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               name: name,
