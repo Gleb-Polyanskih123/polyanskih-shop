@@ -108,3 +108,5 @@ app.post("/buy", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Сервер работает на порту ${PORT}`);
 });
+
+module.exports = app;
