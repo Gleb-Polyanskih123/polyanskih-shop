@@ -1,21 +1,17 @@
 const express = require("express");
 const { Pool } = require("pg");
-const path = require("path");
-const cors = require("cors");
+const cors = require("cors"); // Мы оставили cors, пригодится
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 1. НАСТРОЙКА ПУТЕЙ (Чтобы Vercel видел файлы)
-// __dirname — это папка Node.js. Мы выходим на уровень выше (..), в корень проекта.
-const rootPath = path.join(__dirname, "..");
-
 app.use(cors());
 app.use(express.json());
-// Раздаем статику (картинки, css) из корня
-app.use(express.static(rootPath));
 
-// 2. НАСТРОЙКА БАЗЫ (Обязательно включаем SSL для Neon)
+// ВАЖНО: Мы убрали express.static и rootPath.
+// Сервер теперь занимается ТОЛЬКО данными.
+
+// Настройка базы Neon
 const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -23,23 +19,12 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   ssl: {
-    rejectUnauthorized: false, // ЭТО ВАЖНО для облачной базы!
+    rejectUnauthorized: false,
   },
 });
 
-// Проверка базы при запуске
-pool.connect((err, client, release) => {
-  if (err) {
-    console.error("Ошибка подключения к БД:", err.stack);
-  } else {
-    console.log("✅ Успешное подключение к базе данных Neon!");
-    release();
-  }
-});
+// === API МАРШРУТЫ ===
 
-// === МАРШРУТЫ (API) ===
-
-// Вход
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -50,9 +35,7 @@ app.post("/login", async (req, res) => {
     if (result.rows.length > 0) {
       res.json({ success: true, user: result.rows[0] });
     } else {
-      res
-        .status(401)
-        .json({ success: false, message: "Неверный логин или пароль" });
+      res.status(401).json({ success: false, message: "Неверный логин" });
     }
   } catch (err) {
     console.error(err);
@@ -60,24 +43,14 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Регистрация
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
   try {
-    // Проверяем, есть ли такой юзер
-    const check = await pool.query("SELECT * FROM users WHERE username = $1", [
-      username,
-    ]);
+    const check = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
     if (check.rows.length > 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Пользователь уже существует" });
+      return res.status(400).json({ success: false, message: "Пользователь есть" });
     }
-    // Создаем
-    await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [
-      username,
-      password,
-    ]);
+    await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [username, password]);
     res.json({ success: true });
   } catch (err) {
     console.error(err);
@@ -85,21 +58,18 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// Получение товаров
 app.get("/products", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM products");
     res.json(result.rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Ошибка получения товаров" });
+    res.status(500).json({ error: "Ошибка БД" });
   }
 });
 
-// Покупка
 app.post("/buy", async (req, res) => {
-  const { customer_name, customer_phone, product_name, product_size } =
-    req.body;
+  const { customer_name, customer_phone, product_name, product_size } = req.body;
   try {
     await pool.query(
       "INSERT INTO orders (customer_name, customer_phone, product_name, product_size) VALUES ($1, $2, $3, $4)",
@@ -112,19 +82,5 @@ app.post("/buy", async (req, res) => {
   }
 });
 
-// === ГЛАВНЫЕ СТРАНИЦЫ ===
-// Любой другой запрос возвращает index.html (для одностраничного приложения)
-app.get("*", (req, res) => {
-  res.sendFile(path.join(rootPath, "index.html"));
-});
-
-// === ЗАПУСК (Специально для Vercel) ===
-// Мы не запускаем app.listen внутри Vercel, он делает это сам.
-// Но экспортируем приложение.
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`🚀 Сервер работает на порту ${PORT}`);
-  });
-}
-
+// Экспорт для Vercel
 module.exports = app;
