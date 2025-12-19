@@ -2,10 +2,9 @@
   "name": "polyanskih-shop",
   "version": "1.0.0",
   "description": "Online shop with Vercel deployment",
-  "main": "api/index.js",
+  "main": "Node.js/server.js",
   "scripts": {
-    "start": "node api/index.js",
-    "dev": "node api/index.js"
+    "start": "node Node.js/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
