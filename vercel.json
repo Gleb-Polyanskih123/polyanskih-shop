@@ -1,9 +1,15 @@
 {
-  "rewrites": [
-    { "source": "/login", "destination": "/api/index.js" },
-    { "source": "/register", "destination": "/api/index.js" },
-    { "source": "/products", "destination": "/api/index.js" },
-    { "source": "/buy", "destination": "/api/index.js" },
-    { "source": "/(.*)", "destination": "/$1" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "Node.js/server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "Node.js/server.js"
+    }
   ]
 }
