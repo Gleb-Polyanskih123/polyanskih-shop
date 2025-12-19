@@ -7,25 +7,10 @@
     }
   ],
   "routes": [
-    {
-      "src": "/login",
-      "dest": "/Node.js/server.js"
-    },
-    {
-      "src": "/register",
-      "dest": "/Node.js/server.js"
-    },
-    {
-      "src": "/products",
-      "dest": "/Node.js/server.js"
-    },
-    {
-      "src": "/buy",
-      "dest": "/Node.js/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
+    { "src": "/login", "dest": "/Node.js/server.js" },
+    { "src": "/register", "dest": "/Node.js/server.js" },
+    { "src": "/products", "dest": "/Node.js/server.js" },
+    { "src": "/buy", "dest": "/Node.js/server.js" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
